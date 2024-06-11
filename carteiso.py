@@ -68,7 +68,9 @@ def main():
                 running = False
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 mouse_x, mouse_y = pygame.mouse.get_pos()
-                selected_tile_x, selected_tile_y = get_tile_coordinates(mouse_x, mouse_y, offset_x, offset_y)
+                tile_x, tile_y = get_tile_coordinates(mouse_x, mouse_y, offset_x, offset_y)
+                if 0 <= tile_x < MAP_WIDTH and 0 <= tile_y < MAP_HEIGHT:
+                    selected_tile_x, selected_tile_y = tile_x, tile_y
         
         screen.fill(BACKGROUND_COLOR)
         
