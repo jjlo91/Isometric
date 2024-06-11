@@ -60,6 +60,9 @@ def main():
     offset_y = 100
     selected_tile_x = -1
     selected_tile_y = -1
+
+    dragging = False
+    prev_mouse_x, prev_mouse_y = 0, 0
     
     running = True
     while running:
@@ -67,10 +70,24 @@ def main():
             if event.type == pygame.QUIT:
                 running = False
             elif event.type == pygame.MOUSEBUTTONDOWN:
-                mouse_x, mouse_y = pygame.mouse.get_pos()
-                tile_x, tile_y = get_tile_coordinates(mouse_x, mouse_y, offset_x, offset_y)
-                if 0 <= tile_x < MAP_WIDTH and 0 <= tile_y < MAP_HEIGHT:
-                    selected_tile_x, selected_tile_y = tile_x, tile_y
+                if event.button == 1:  # Left mouse button
+                    mouse_x, mouse_y = pygame.mouse.get_pos()
+                    tile_x, tile_y = get_tile_coordinates(mouse_x, mouse_y, offset_x, offset_y)
+                    if 0 <= tile_x < MAP_WIDTH and 0 <= tile_y < MAP_HEIGHT:
+                        selected_tile_x, selected_tile_y = tile_x, tile_y
+                    dragging = True
+                    prev_mouse_x, prev_mouse_y = mouse_x, mouse_y
+            elif event.type == pygame.MOUSEBUTTONUP:
+                if event.button == 1:  # Left mouse button
+                    dragging = False
+            elif event.type == pygame.MOUSEMOTION:
+                if dragging:
+                    mouse_x, mouse_y = event.pos
+                    dx = mouse_x - prev_mouse_x
+                    dy = mouse_y - prev_mouse_y
+                    offset_x += dx
+                    offset_y += dy
+                    prev_mouse_x, prev_mouse_y = mouse_x, mouse_y
         
         screen.fill(BACKGROUND_COLOR)
         
